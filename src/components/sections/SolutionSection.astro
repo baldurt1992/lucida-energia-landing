@@ -1,3 +1,8 @@
+---
+import { Picture } from "astro:assets";
+import solutionImage from "../../assets/images/solution-review.jpg";
+---
+
 <section id="solucion" class="solution" aria-labelledby="solucion-titulo">
   <div class="shell">
     <header class="intro">
@@ -11,12 +16,13 @@
     </header>
 
     <figure class="solution-image" data-reveal="mask">
-      <img
-        src="https://images.pexels.com/photos/6963909/pexels-photo-6963909.jpeg?auto=compress&cs=tinysrgb&w=1200"
-        srcset="https://images.pexels.com/photos/6963909/pexels-photo-6963909.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/6963909/pexels-photo-6963909.jpeg?auto=compress&cs=tinysrgb&w=1200 1200w, https://images.pexels.com/photos/6963909/pexels-photo-6963909.jpeg?auto=compress&cs=tinysrgb&w=1600 1600w"
+      <Picture
+        src={solutionImage}
+        formats={["avif"]}
+        fallbackFormat="webp"
+        widths={[480, 800, 1200, 1600]}
         sizes="(min-width: 1100px) 42vw, 100vw"
-        width="1200"
-        height="800"
+        quality={70}
         loading="lazy"
         decoding="async"
         alt="Pareja revisando documentos y gastos del hogar en una mesa."

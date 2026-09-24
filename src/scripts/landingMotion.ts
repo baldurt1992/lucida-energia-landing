@@ -15,6 +15,7 @@ const LOG_TAG = "[LandingMotion]";
 const TRIGGER_PREFIX = "landing-motion";
 const HEADER_STATE_ATTR = "data-header-state";
 const HEADER_SCROLL_OFFSET = 48;
+const HEADER_PIN_OFFSET = 68;
 
 const BREAKPOINT = {
   tabletMin: 768,
@@ -340,15 +341,6 @@ function billTo(variant: BillVariant): gsap.TweenVars {
   }
 }
 
-function billPinStart(): string {
-  const header = document.querySelector<HTMLElement>(landingMotionHooks.header);
-  if (!header) return "top top";
-  const position = getComputedStyle(header).position;
-  if (position !== "fixed" && position !== "sticky") return "top top";
-  const height = Math.round(header.getBoundingClientRect().height);
-  return height > 0 ? `top ${height}px` : "top top";
-}
-
 function prepareMediaFrame(media: HTMLElement): ClipRestore | null {
   const frame = media.parentElement;
   if (!frame || frame === document.body || frame === document.documentElement) return null;
@@ -469,7 +461,6 @@ function mountLayerOnce(
   index: number,
   profile: MotionProfile,
 ): void {
-  if (verticalPlacement(layer) !== "below") return;
   const variant = readBillVariant(layer, index);
   gsap.fromTo(layer, billFrom(variant, profile), {
     ...billTo(variant),
@@ -490,9 +481,15 @@ function mountLayerOnce(
 }
 
 function mountFlowingBill(stage: HTMLElement, profile: MotionProfile, idOffset: number): Release {
-  queryAll(landingMotionHooks.billLayer, stage).forEach((layer, index) => {
-    mountLayerOnce(layer, idOffset + index, profile);
-  });
+  const layers = queryAll(landingMotionHooks.billLayer, stage)
+    .map((layer, index) => ({
+      layer,
+      index: idOffset + index,
+      placement: verticalPlacement(layer),
+    }))
+    .filter(({ placement }) => placement === "below");
+
+  layers.forEach(({ layer, index }) => mountLayerOnce(layer, index, profile));
   return () => {};
 }
 
@@ -507,7 +504,7 @@ function mountPinnedBill(stage: HTMLElement, profile: MotionProfile): BillMount 
     scrollTrigger: {
       id: `${TRIGGER_PREFIX}-bill`,
       trigger: stage,
-      start: billPinStart(),
+      start: `top ${HEADER_PIN_OFFSET}px`,
       end: () => {
         const screens = Math.min(Math.max(layers.length, 1) * 0.42, 1.15);
         return `+=${Math.round(window.innerHeight * screens)}`;
@@ -564,10 +561,16 @@ function mountBill(profile: MotionProfile): BillMount {
 }
 
 function mountReveals(profile: MotionProfile): Release {
-  queryAll(landingMotionHooks.reveal).forEach((element, index) => {
-    if (shouldSkipReveal(element)) return;
-    if (verticalPlacement(element) !== "below") return;
+  const reveals = queryAll(landingMotionHooks.reveal)
+    .map((element, index) => ({ element, index }))
+    .filter(({ element }) => !shouldSkipReveal(element))
+    .map((candidate) => ({
+      ...candidate,
+      placement: verticalPlacement(candidate.element),
+    }))
+    .filter(({ placement }) => placement === "below");
 
+  reveals.forEach(({ element, index }) => {
     const variant = readRevealVariant(element, index);
     gsap.fromTo(element, revealFrom(variant, profile.revealDistance), {
       ...revealTo(variant),

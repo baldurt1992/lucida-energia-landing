@@ -1,3 +1,8 @@
+---
+import { Picture } from "astro:assets";
+import audienceImage from "../../assets/images/audience-workshop.jpg";
+---
+
 <section id="para-quien" class="audience" aria-labelledby="audiencia-titulo">
   <div class="shell">
     <header class="intro">
@@ -9,12 +14,13 @@
 
     <div class="audience-grid">
       <figure class="audience-image" data-reveal="mask">
-        <img
-          src="https://images.pexels.com/photos/37076986/pexels-photo-37076986.jpeg?auto=compress&cs=tinysrgb&w=1200"
-          srcset="https://images.pexels.com/photos/37076986/pexels-photo-37076986.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/37076986/pexels-photo-37076986.jpeg?auto=compress&cs=tinysrgb&w=1200 1200w"
+        <Picture
+          src={audienceImage}
+          formats={["avif"]}
+          fallbackFormat="webp"
+          widths={[480, 720, 960, 1200]}
           sizes="(min-width: 800px) 42vw, 100vw"
-          width="1200"
-          height="900"
+          quality={70}
           loading="lazy"
           decoding="async"
           alt="Artesano trabajando en su taller de Madrid."

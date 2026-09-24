@@ -86,7 +86,7 @@ El resultado fue adaptado, corregido y validado manualmente. El diseño se desar
 - Build estático de producción: correcto.
 - Responsive validado en 390 × 844, 768 × 1024 y 1440 × 900 px.
 - Flujo completo del formulario verificado.
-- Lighthouse: Performance 89, Accessibility 100, Best Practices 77 y SEO 100.
+- Lighthouse: Performance 100, Accessibility 100, Best Practices 100 y SEO 100.
 
 Los resultados y observaciones están documentados en [`QA_REPORT.md`](./QA_REPORT.md).
 

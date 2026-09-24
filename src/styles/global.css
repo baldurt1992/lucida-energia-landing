@@ -3,6 +3,22 @@
    El acento --color-electric queda reservado a la acción primaria, el foco y la selección.
    Anclas de página: #inicio, #problema, #solucion, #beneficios, #como-funciona, #consulta. */
 
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/public-sans-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: optional;
+}
+
 :root {
   --color-petroleum: #0e2c26;
   --color-petroleum-deep: #071816;

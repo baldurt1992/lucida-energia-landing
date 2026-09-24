@@ -1,22 +1,26 @@
 ---
 /** Primera escena. La promesa y las acciones están en HTML; la foto no tapa el texto. */
+
+import { Picture } from "astro:assets";
+import heroImage from "../../assets/images/hero-home-energy.jpg";
 ---
 
 <section class="hero" id="inicio" aria-labelledby="hero-titulo">
   <div class="hero-media" data-hero-media>
     <!--
-      Fotografía: Pexels 4050417
+      Fotografía descargada como asset local. Fuente: Pexels 4050417.
       https://www.pexels.com/photo/4050417/
-      https://images.pexels.com/photos/4050417/pexels-photo-4050417.jpeg
     -->
-    <img
+    <Picture
       class="hero-photo"
-      src="https://images.pexels.com/photos/4050417/pexels-photo-4050417.jpeg?auto=compress&cs=tinysrgb&w=1600"
-      srcset="https://images.pexels.com/photos/4050417/pexels-photo-4050417.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/4050417/pexels-photo-4050417.jpeg?auto=compress&cs=tinysrgb&w=960 960w, https://images.pexels.com/photos/4050417/pexels-photo-4050417.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/4050417/pexels-photo-4050417.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w"
+      src={heroImage}
+      formats={["avif"]}
+      fallbackFormat="webp"
+      widths={[480, 720, 840, 1280, 1920]}
       sizes="100vw"
-      width="1200"
-      height="800"
+      quality={60}
       alt="Persona en casa, sentada junto a una ventana con luz natural, en una habitación con radiador."
+      loading="eager"
       fetchpriority="high"
       decoding="async"
     />

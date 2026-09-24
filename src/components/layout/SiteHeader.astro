@@ -122,31 +122,33 @@ const links = [
       .map((link) => document.querySelector<HTMLElement>(link.hash))
       .filter((section): section is HTMLElement => section !== null);
 
-    let activeFrame = 0;
-    const updateActiveLink = (): void => {
-      activeFrame = 0;
-      const probe = Math.max(
-        header.getBoundingClientRect().height + 24,
-        window.innerHeight * 0.32,
-      );
-      const current = observedSections.reduce<HTMLElement | null>(
-        (selected, section) => {
-          if (section.getBoundingClientRect().top > probe) return selected;
-          return section;
-        },
-        observedSections[0] ?? null,
-      );
-      if (current) setActiveLink(current.id);
-    };
+    const sectionOrder = new Map(
+      observedSections.map((section, index) => [section.id, index]),
+    );
+    let previousScrollY = window.scrollY;
 
-    const requestActiveUpdate = (): void => {
-      if (activeFrame !== 0) return;
-      activeFrame = window.requestAnimationFrame(updateActiveLink);
-    };
+    const activeObserver = new IntersectionObserver(
+      (entries) => {
+        const scrollingDown = window.scrollY >= previousScrollY;
+        previousScrollY = window.scrollY;
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((first, second) => {
+            const firstOrder = sectionOrder.get(first.target.id) ?? 0;
+            const secondOrder = sectionOrder.get(second.target.id) ?? 0;
+            return firstOrder - secondOrder;
+          });
 
-    window.addEventListener("scroll", requestActiveUpdate, { passive: true });
-    window.addEventListener("resize", requestActiveUpdate);
-    updateActiveLink();
+        const active = scrollingDown ? visible.at(-1) : visible[0];
+        if (active) setActiveLink(active.target.id);
+      },
+      {
+        rootMargin: "-68px 0px -65% 0px",
+        threshold: 0,
+      },
+    );
+
+    observedSections.forEach((section) => activeObserver.observe(section));
 
     setOpen(false);
   }

@@ -1,4 +1,6 @@
 ---
+import { Picture } from "astro:assets";
+import cinematicImage from "../assets/images/cinematic-solar-home.jpg";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SiteFooter from "../components/layout/SiteFooter.astro";
 import AudienceSection from "../components/sections/AudienceSection.astro";
@@ -20,12 +22,13 @@ import TrustSection from "../components/sections/TrustSection.astro";
   <BillAnalysisSection />
   <div class="cinematic-flow">
     <div class="cinematic-backdrop" aria-hidden="true">
-      <img
-        src="https://images.pexels.com/photos/9875684/pexels-photo-9875684.jpeg?auto=compress&cs=tinysrgb&w=1600"
-        srcset="https://images.pexels.com/photos/9875684/pexels-photo-9875684.jpeg?auto=compress&cs=tinysrgb&w=960 960w, https://images.pexels.com/photos/9875684/pexels-photo-9875684.jpeg?auto=compress&cs=tinysrgb&w=1600 1600w, https://images.pexels.com/photos/9875684/pexels-photo-9875684.jpeg?auto=compress&cs=tinysrgb&w=2200 2200w"
+      <Picture
+        src={cinematicImage}
+        formats={["avif"]}
+        fallbackFormat="webp"
+        widths={[480, 720, 840, 1280, 1920]}
         sizes="100vw"
-        width="1600"
-        height="1067"
+        quality={45}
         loading="lazy"
         decoding="async"
         alt=""
@@ -46,7 +49,24 @@ import TrustSection from "../components/sections/TrustSection.astro";
 </BaseLayout>
 
 <script>
-  import "../scripts/landingMotion";
+  const loadMotion = (): void => {
+    const start = (): void => {
+      void import("../scripts/landingMotion");
+    };
+    const idleCallback = Reflect.get(window, "requestIdleCallback") as
+      | typeof window.requestIdleCallback
+      | undefined;
+
+    if (typeof idleCallback === "function") {
+      idleCallback(start, { timeout: 1200 });
+      return;
+    }
+
+    window.setTimeout(start, 1);
+  };
+
+  if (document.readyState === "complete") loadMotion();
+  else window.addEventListener("load", loadMotion, { once: true });
 </script>
 
 <style>

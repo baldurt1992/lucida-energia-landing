@@ -39,12 +39,14 @@ No quedaron errores de campo después del envío. El adaptador es simulado y no 
 
 Medición móvil sobre `astro preview`, sin el toolbar de desarrollo:
 
-- Performance: **89**
+- Performance: **100**
 - Accessibility: **100**
-- Best Practices: **77**
+- Best Practices: **100**
 - SEO: **100**
 
-La reducción de Best Practices proviene de cookies técnicas establecidas por el CDN de Pexels al servir las fotografías remotas. Lighthouse también identifica oportunidades menores en compresión de imágenes y JavaScript no utilizado.
+Todas las fotografías y fuentes se sirven desde el propio sitio. La auditoría no detecta cookies de terceros, solicitudes externas, recursos CSS bloqueantes ni oportunidades de entrega de imágenes.
+
+Los diagnósticos no puntuados conservan dos observaciones menores: aproximadamente 20 KiB de JavaScript no utilizado dentro de GSAP y el cálculo de layout inicial asociado al CSS inline. Ninguna afecta la puntuación ni provoca trabajo de reflow atribuible al código de navegación.
 
 ## Accesibilidad comprobada
 
@@ -59,4 +61,4 @@ La reducción de Best Practices proviene de cookies técnicas establecidas por e
 
 ## Resultado
 
-No se detectaron bloqueos funcionales ni problemas responsive. La optimización prioritaria para una versión de producción sería servir localmente las fotografías en formatos modernos para eliminar la dependencia y las cookies del CDN externo.
+No se detectaron bloqueos funcionales, dependencias externas ni problemas responsive. Las imágenes locales se generan en AVIF y WebP con variantes adaptadas al viewport.
