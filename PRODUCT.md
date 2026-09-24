@@ -35,13 +35,6 @@ El visitante consulta la página principalmente desde móvil o escritorio, puede
 
 - Marca conceptual provisional: **LÚCIDA — Asesoría energética**.
 - Voz clara, directa, humana y profesional.
-- La referencia Y.CO es una referencia de ritmo, escala fotográfica y narrativa de scroll, no una identidad para copiar.
-
-## Evidence on Hand
-
-- Brief original: `prueba_tecnica_disenadora_web_grupo_emax_corta_final (1).docx`.
-- No existen testimonios, clientes, métricas, certificaciones ni porcentajes de ahorro verificables. No deben fabricarse.
-- Existe acceso a Pexels para seleccionar fotografía de apoyo; sus credenciales nunca deben llegar al cliente.
 
 ## Product Principles
 
