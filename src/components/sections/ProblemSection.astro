@@ -4,14 +4,14 @@
   aria-labelledby="problema-titulo"
 >
   <div class="shell">
-    <div class="layout">
-      <h2 id="problema-titulo" class="title" data-reveal="manifesto">
-        Pagas energía.<br />
-        También pagas <em class="mark">confusión.</em>
+    <div class="layout" data-reveal="lift">
+      <h2 id="problema-titulo" class="title">
+        Pagas energía,<br />
+        no <em class="mark">confusión.</em>
       </h2>
 
       <div class="copy">
-        <ul class="pains" data-reveal="lines">
+        <ul class="pains">
           <li>Tarifas difíciles de comparar.</li>
           <li>Potencia que puede no encajar con el uso.</li>
           <li>Condiciones y servicios poco claros.</li>
@@ -146,22 +146,64 @@
     color: var(--color-muted, var(--color-ink-soft));
   }
 
-  @media (min-width: 800px) {
-    .title {
-      grid-column: 1 / -1;
+  @media (min-width: 960px) {
+    .layout {
+      grid-template-columns: minmax(25rem, 1.05fr) minmax(22rem, 0.95fr);
+      column-gap: clamp(2.5rem, 5vw, 5rem);
+      row-gap: clamp(2.5rem, 5vw, 4rem);
+      align-items: start;
     }
 
-    .layout {
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      align-items: end;
+    .title {
+      grid-column: 1;
+      max-width: 13ch;
+      font-size: clamp(3rem, 4.6vw, 4.5rem);
     }
 
     .copy {
-      grid-column: 1;
+      grid-column: 2;
+      padding-top: 0.35rem;
+    }
+
+    .pains {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      border-top: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+    }
+
+    .pains li,
+    .pains li:first-child {
+      max-width: none;
+      min-height: 7rem;
+      padding: 1rem 1.25rem 1rem 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+      font-size: clamp(1.2rem, 1rem + 0.55vw, 1.55rem);
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .pains li:nth-child(odd) {
+      border-right: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+    }
+
+    .pains li:nth-child(even) {
+      padding-left: 1.25rem;
+    }
+
+    .reading {
+      max-width: 46ch;
     }
 
     .scraps {
-      grid-column: 2;
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+    }
+
+    .scrap,
+    .scrap-shift,
+    .scrap-shift-more {
+      padding-inline-start: 0;
     }
   }
 
