@@ -90,6 +90,18 @@ El resultado fue adaptado, corregido y validado manualmente. El diseño se desar
 
 Los resultados y observaciones están documentados en [`QA_REPORT.md`](./QA_REPORT.md).
 
+### Evidencia Lighthouse
+
+Las auditorías deben ejecutarse en una ventana de incógnito o con todas las extensiones deshabilitadas. Extensiones como analizadores tecnológicos, traductores o herramientas de desarrollo inyectan scripts en la página y alteran métricas como Total Blocking Time, JavaScript no utilizado y trabajo del hilo principal.
+
+#### Desktop — 100/100/100/100
+
+![Lighthouse desktop con puntuación 100 en Performance, Accessibility, Best Practices y SEO](./docs/lighthouse-desktop-100.png)
+
+#### Mobile — 100/100/100/100
+
+![Lighthouse mobile con puntuación 100 en Performance, Accessibility, Best Practices y SEO](./docs/lighthouse-mobile-100.png)
+
 ## Alcance conceptual
 
 LÚCIDA es una identidad creada para esta prueba. Los datos de la factura son sintéticos y los textos legales son demostrativos. La página no representa una empresa ni un servicio energético en operación.
