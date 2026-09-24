@@ -1,0 +1,135 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteFooter from "../components/layout/SiteFooter.astro";
+import AudienceSection from "../components/sections/AudienceSection.astro";
+import BenefitsSection from "../components/sections/BenefitsSection.astro";
+import BillAnalysisSection from "../components/sections/BillAnalysisSection.astro";
+import ContactSection from "../components/sections/ContactSection.astro";
+import FaqSection from "../components/sections/FaqSection.astro";
+import FinalCtaSection from "../components/sections/FinalCtaSection.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import HowItWorksSection from "../components/sections/HowItWorksSection.astro";
+import ProblemSection from "../components/sections/ProblemSection.astro";
+import SolutionSection from "../components/sections/SolutionSection.astro";
+import TrustSection from "../components/sections/TrustSection.astro";
+---
+
+<BaseLayout>
+  <HeroSection />
+  <ProblemSection />
+  <BillAnalysisSection />
+  <div class="cinematic-flow">
+    <div class="cinematic-backdrop" aria-hidden="true">
+      <img
+        src="https://images.pexels.com/photos/9875684/pexels-photo-9875684.jpeg?auto=compress&cs=tinysrgb&w=1600"
+        srcset="https://images.pexels.com/photos/9875684/pexels-photo-9875684.jpeg?auto=compress&cs=tinysrgb&w=960 960w, https://images.pexels.com/photos/9875684/pexels-photo-9875684.jpeg?auto=compress&cs=tinysrgb&w=1600 1600w, https://images.pexels.com/photos/9875684/pexels-photo-9875684.jpeg?auto=compress&cs=tinysrgb&w=2200 2200w"
+        sizes="100vw"
+        width="1600"
+        height="1067"
+        loading="lazy"
+        decoding="async"
+        alt=""
+      />
+    </div>
+    <div class="cinematic-content">
+      <SolutionSection />
+      <BenefitsSection />
+      <AudienceSection />
+      <HowItWorksSection />
+    </div>
+  </div>
+  <TrustSection />
+  <ContactSection />
+  <FaqSection />
+  <FinalCtaSection />
+  <SiteFooter slot="footer" />
+</BaseLayout>
+
+<script>
+  import "../scripts/landingMotion";
+</script>
+
+<style>
+  .cinematic-flow {
+    position: relative;
+    isolation: isolate;
+    padding-bottom: clamp(4rem, 10vw, 9rem);
+    overflow: clip;
+    background: var(--color-petroleum-deep);
+  }
+
+  .cinematic-backdrop {
+    position: sticky;
+    z-index: 0;
+    top: 0;
+    height: 100svh;
+    margin-bottom: -100svh;
+    overflow: hidden;
+  }
+
+  .cinematic-backdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(7 24 22 / 38%), rgb(7 24 22 / 72%)),
+      linear-gradient(90deg, rgb(7 24 22 / 32%), transparent 55%);
+  }
+
+  .cinematic-backdrop img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.62) contrast(1.08);
+    transform: scale(1.02);
+  }
+
+  .cinematic-content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(4rem, 10vw, 9rem);
+    padding-top: clamp(4rem, 10vw, 9rem);
+  }
+
+  :global(.cinematic-content > section) {
+    width: min(calc(100% - (var(--gutter) * 2)), var(--page-max));
+    margin-inline: auto;
+    box-shadow: 0 32px 80px rgb(0 0 0 / 24%);
+  }
+
+  @media (max-width: 47.99rem) {
+    .cinematic-flow {
+      padding-bottom: 0;
+    }
+
+    .cinematic-backdrop {
+      position: relative;
+      height: 58svh;
+      min-height: 24rem;
+      margin-bottom: -18svh;
+    }
+
+    .cinematic-content {
+      gap: 2rem;
+      padding-top: 0;
+    }
+
+    :global(.cinematic-content > section) {
+      width: 100%;
+      box-shadow: 0 20px 48px rgb(0 0 0 / 20%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cinematic-backdrop {
+      position: relative;
+      height: 70svh;
+      margin-bottom: -24svh;
+    }
+
+    .cinematic-backdrop img {
+      transform: none;
+    }
+  }
+</style>

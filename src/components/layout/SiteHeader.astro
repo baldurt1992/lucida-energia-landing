@@ -1,0 +1,355 @@
+---
+/** Navegación persistente. El menú móvil se activa con JS; sin JS los enlaces siguen visibles. */
+
+import BrandMark from "../brand/BrandMark.astro";
+
+const links = [
+  { href: "#problema", label: "Problema" },
+  { href: "#factura", label: "Revisión" },
+  { href: "#beneficios", label: "Beneficios" },
+  { href: "#como-funciona", label: "Cómo funciona" },
+  { href: "#consulta", label: "Consulta" },
+] as const;
+---
+
+<header class="site-header surface-petroleum" data-site-header data-header>
+  <div class="bar">
+    <a class="brand" href="#inicio">
+      <BrandMark class="brand-mark" />
+      <span class="brand-copy">
+        <span class="brand-name">LÚCIDA</span>
+        <span class="visually-hidden">, asesoría energética</span>
+        <span class="brand-meta" aria-hidden="true">Energía</span>
+      </span>
+    </a>
+    <button
+      class="nav-toggle"
+      type="button"
+      data-nav-toggle
+      aria-expanded="false"
+      aria-controls="navegacion"
+    >
+      <span data-nav-label>Menú</span>
+    </button>
+  </div>
+  <nav class="site-nav" id="navegacion" aria-label="Secciones" data-site-nav>
+    <ul class="nav-list">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  function initSiteHeader(): void {
+    const header = document.querySelector<HTMLElement>("[data-site-header]");
+    const toggle =
+      header?.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+    const nav = header?.querySelector<HTMLElement>("[data-site-nav]");
+    const label = header?.querySelector<HTMLElement>("[data-nav-label]");
+
+    if (!header || !toggle || !nav || !label) return;
+
+    const background = [
+      document.getElementById("contenido"),
+      document.querySelector<HTMLElement>(".skip-link"),
+      document.querySelector<HTMLElement>("footer"),
+    ].filter((node): node is HTMLElement => node instanceof HTMLElement);
+    const mobileQuery = window.matchMedia("(max-width: 55.99rem)");
+    const sectionLinks = Array.from(
+      nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'),
+    );
+
+    const setBackgroundLocked = (locked: boolean): void => {
+      document.body.classList.toggle("nav-open", locked);
+      for (const node of background) {
+        if (locked) node.setAttribute("inert", "");
+        else node.removeAttribute("inert");
+      }
+    };
+
+    const setOpen = (open: boolean): void => {
+      const mobile = mobileQuery.matches;
+      const nextOpen = mobile && open;
+      nav.classList.toggle("is-open", nextOpen);
+      toggle.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+      label.textContent = nextOpen ? "Cerrar" : "Menú";
+
+      if (mobile && !nextOpen) nav.setAttribute("inert", "");
+      else nav.removeAttribute("inert");
+
+      setBackgroundLocked(nextOpen);
+    };
+
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      setOpen(!expanded);
+    });
+
+    nav.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (!target.closest("a")) return;
+      setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (toggle.getAttribute("aria-expanded") !== "true") return;
+      setOpen(false);
+      toggle.focus();
+    });
+
+    mobileQuery.addEventListener("change", () => {
+      setOpen(false);
+    });
+
+    const setActiveLink = (sectionId: string): void => {
+      sectionLinks.forEach((link) => {
+        const isActive = link.hash === `#${sectionId}`;
+        link.classList.toggle("is-active", isActive);
+        if (isActive) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    };
+
+    const observedSections = sectionLinks
+      .map((link) => document.querySelector<HTMLElement>(link.hash))
+      .filter((section): section is HTMLElement => section !== null);
+
+    let activeFrame = 0;
+    const updateActiveLink = (): void => {
+      activeFrame = 0;
+      const probe = Math.max(
+        header.getBoundingClientRect().height + 24,
+        window.innerHeight * 0.32,
+      );
+      const current = observedSections.reduce<HTMLElement | null>(
+        (selected, section) => {
+          if (section.getBoundingClientRect().top > probe) return selected;
+          return section;
+        },
+        observedSections[0] ?? null,
+      );
+      if (current) setActiveLink(current.id);
+    };
+
+    const requestActiveUpdate = (): void => {
+      if (activeFrame !== 0) return;
+      activeFrame = window.requestAnimationFrame(updateActiveLink);
+    };
+
+    window.addEventListener("scroll", requestActiveUpdate, { passive: true });
+    window.addEventListener("resize", requestActiveUpdate);
+    updateActiveLink();
+
+    setOpen(false);
+  }
+
+  initSiteHeader();
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    border-bottom: 1px solid var(--color-line-deep);
+  }
+
+  .bar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    min-height: var(--header-offset);
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px))
+      max(var(--gutter), env(safe-area-inset-right, 0px));
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 44px;
+    color: var(--color-mineral);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 auto;
+    color: var(--color-petroleum-raised);
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .brand:hover .brand-mark {
+    transform: rotate(-4deg);
+  }
+
+  .brand-copy {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1;
+  }
+
+  .brand-meta {
+    color: var(--color-mineral-soft);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav-toggle {
+    display: none;
+    appearance: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem 0.85rem;
+    border: 1px solid var(--color-line-deep);
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--color-mineral);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+
+  .nav-toggle[aria-expanded="true"] {
+    background: var(--color-petroleum-raised);
+  }
+
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    list-style: none;
+  }
+
+  .nav-list a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.4rem 0.75rem;
+    color: var(--color-mineral);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav-list a::after {
+    content: "";
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.28rem;
+    left: 0.75rem;
+    height: 2px;
+    background: var(--color-electric);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-list a.is-active {
+    color: var(--color-electric);
+  }
+
+  .nav-list a.is-active::after {
+    transform: scaleX(1);
+  }
+
+  .nav-list a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
+  }
+
+  @media (min-width: 56rem) {
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: var(--header-offset);
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px))
+        max(var(--gutter), env(safe-area-inset-right, 0px));
+    }
+
+    .bar {
+      min-height: 0;
+      padding: 0;
+    }
+
+    .site-nav {
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 55.99rem) {
+    .site-nav {
+      border-top: 1px solid var(--color-line-deep);
+    }
+
+    .nav-list {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 0.35rem max(var(--gutter), env(safe-area-inset-right, 0px))
+        max(1rem, env(safe-area-inset-bottom, 0px))
+        max(var(--gutter), env(safe-area-inset-left, 0px));
+    }
+
+    .nav-list a {
+      width: 100%;
+      min-height: 48px;
+      padding-inline: 0;
+      border-bottom: 1px solid var(--color-line-deep);
+    }
+
+    .nav-list a::after {
+      right: auto;
+      bottom: 0.55rem;
+      left: 0;
+      width: 2.5rem;
+    }
+
+    :global(html.js) .nav-toggle {
+      display: inline-flex;
+    }
+
+    :global(html.js) .site-nav {
+      position: fixed;
+      z-index: var(--z-menu);
+      inset: calc(var(--header-offset) + 1px) 0 0 0;
+      background: var(--color-petroleum);
+      overflow: auto;
+    }
+
+    :global(html.js) .site-nav:not(.is-open) {
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+</style>

@@ -1,0 +1,305 @@
+---
+const questions = [
+  {
+    question: "¿La consulta tiene algún coste?",
+    answer:
+      "La revisión inicial es gratuita. No pedimos un pago ni se contrata nada al enviar el formulario.",
+  },
+  {
+    question: "¿Necesito tener una factura a mano?",
+    answer:
+      "Conviene tenerla: ahí están el consumo, la potencia y las condiciones. Si no la tienes ahora, puedes describir tu caso y diremos qué datos faltan para la revisión.",
+  },
+  {
+    question: "¿Pueden revisar luz y gas?",
+    answer:
+      "Sí. La revisión puede cubrir la electricidad, el gas o los dos contratos, según lo que nos cuentes.",
+  },
+  {
+    question: "¿Atienden a empresas?",
+    answer:
+      "Sí. Trabajamos con hogares, autónomos y pequeñas y medianas empresas.",
+  },
+  {
+    question: "¿Estoy obligado a cambiar de compañía?",
+    answer:
+      "No. La revisión explica tu contrato y las alternativas. Cambiar de comercializadora, ajustar la potencia o no hacer cambios es una decisión tuya.",
+  },
+  {
+    question: "¿Cómo se protegen mis datos?",
+    answer:
+      "Solo solicitamos la información necesaria para responder tu consulta. El tratamiento definitivo deberá detallarse en la política de privacidad del servicio antes de publicar la página.",
+  },
+] as const;
+---
+
+<section
+  class="faq"
+  id="preguntas"
+  lang="es"
+  aria-labelledby="preguntas-titulo"
+>
+  <div class="shell">
+    <h2 id="preguntas-titulo">Dudas antes de solicitar la revisión</h2>
+    <div class="list">
+      {
+        questions.map((item) => (
+          <details class="item" data-faq-item>
+            <summary>
+              <span class="question">{item.question}</span>
+              <span class="marker" aria-hidden="true" />
+            </summary>
+            <div class="answer-panel" data-faq-panel>
+              <p class="answer">{item.answer}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  function initFaq(): void {
+    const items = Array.from(
+      document.querySelectorAll<HTMLDetailsElement>("[data-faq-item]"),
+    );
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const animations = new WeakMap<HTMLElement, Animation>();
+
+    const toggleItem = (
+      item: HTMLDetailsElement,
+      shouldOpen: boolean,
+    ): void => {
+      const panel = item.querySelector<HTMLElement>("[data-faq-panel]");
+      if (!panel) {
+        item.open = shouldOpen;
+        return;
+      }
+
+      animations.get(panel)?.cancel();
+
+      if (reduceMotion.matches) {
+        item.open = shouldOpen;
+        panel.removeAttribute("style");
+        return;
+      }
+
+      if (shouldOpen) {
+        item.open = true;
+        const targetHeight = panel.scrollHeight;
+        const animation = panel.animate(
+          [
+            { height: "0px", opacity: 0, transform: "translateY(-8px)" },
+            {
+              height: `${targetHeight}px`,
+              opacity: 1,
+              transform: "translateY(0)",
+            },
+          ],
+          { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+        );
+        animations.set(panel, animation);
+        animation.onfinish = () => {
+          panel.removeAttribute("style");
+          animations.delete(panel);
+        };
+        return;
+      }
+
+      const startHeight = panel.getBoundingClientRect().height;
+      const animation = panel.animate(
+        [
+          {
+            height: `${startHeight}px`,
+            opacity: 1,
+            transform: "translateY(0)",
+          },
+          { height: "0px", opacity: 0, transform: "translateY(-6px)" },
+        ],
+        { duration: 210, easing: "cubic-bezier(0.4, 0, 1, 1)" },
+      );
+      animations.set(panel, animation);
+      animation.onfinish = () => {
+        item.open = false;
+        panel.removeAttribute("style");
+        animations.delete(panel);
+      };
+    };
+
+    items.forEach((item) => {
+      if (item.dataset.bound === "true") return;
+      item.dataset.bound = "true";
+      const summary = item.querySelector<HTMLElement>("summary");
+      summary?.addEventListener("click", (event) => {
+        event.preventDefault();
+        const shouldOpen = !item.open;
+        if (shouldOpen) {
+          items.forEach((other) => {
+            if (other !== item && other.open) toggleItem(other, false);
+          });
+        }
+        toggleItem(item, shouldOpen);
+      });
+    });
+  }
+
+  initFaq();
+  document.addEventListener("astro:page-load", initFaq);
+</script>
+
+<style>
+  .faq {
+    box-sizing: border-box;
+    background: color-mix(
+      in srgb,
+      var(--color-sky, #d5e6ea) 18%,
+      var(--color-mineral, #f3f0e8)
+    );
+    color: var(--color-ink, #14211c);
+    font-family: var(--font-body, "Public Sans", sans-serif);
+    padding-block: var(--space-section, clamp(4.5rem, 8vw, 7.5rem));
+  }
+
+  .faq *,
+  .faq *::before,
+  .faq *::after {
+    box-sizing: border-box;
+  }
+
+  .faq :where(h2, p) {
+    margin: 0;
+  }
+
+  .shell {
+    width: min(100%, var(--container, var(--page-max)));
+    margin-inline: auto;
+    padding-inline: var(--gutter, clamp(1.25rem, 4vw, 3.5rem));
+  }
+
+  h2 {
+    max-width: 16em;
+    font-family: var(--font-display, Archivo, sans-serif);
+    font-size: clamp(2.3rem, 5vw, 4.4rem);
+    font-weight: 640;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+
+  .list {
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .item {
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-ink, #14211c) 18%, transparent);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+
+  .item:last-child {
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--color-ink, #14211c) 18%, transparent);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 48px;
+    padding: 1.15rem 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:focus-visible {
+    outline: 2px solid var(--color-ink, #14211c);
+    outline-offset: 4px;
+  }
+
+  .item:hover,
+  .item[open] {
+    background: color-mix(in srgb, var(--color-current) 10%, transparent);
+  }
+
+  .question {
+    font-family: var(--font-display, Archivo, sans-serif);
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+    font-weight: 640;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .marker {
+    position: relative;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 24%, transparent);
+    border-radius: 50%;
+    transition:
+      transform 260ms var(--ease-out),
+      background 180ms var(--ease-out);
+  }
+
+  .marker::before,
+  .marker::after {
+    content: "";
+    position: absolute;
+    background: var(--color-ink, #14211c);
+  }
+
+  .marker::before {
+    top: 50%;
+    left: 50%;
+    width: 0.8rem;
+    height: 1px;
+    transform: translate(-50%, -50%);
+  }
+
+  .marker::after {
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 0.8rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .item[open] .marker {
+    background: var(--color-current);
+    transform: rotate(45deg);
+  }
+
+  .answer-panel {
+    overflow: hidden;
+  }
+
+  .answer {
+    max-width: 65ch;
+    padding: 0 4rem 1.5rem 1rem;
+    line-height: 1.55;
+    color: var(--color-muted, #3e5149);
+  }
+
+  @media (forced-colors: active) {
+    summary {
+      border: 1px solid ButtonText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .item,
+    summary,
+    .marker {
+      transition: none;
+      animation: none;
+    }
+  }
+</style>

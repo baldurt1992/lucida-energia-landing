@@ -1,0 +1,31 @@
+---
+interface Props {
+  class?: string;
+}
+
+const className = Astro.props.class;
+---
+
+<svg
+  class:list={["brand-symbol", className]}
+  viewBox="0 0 48 48"
+  aria-hidden="true"
+  focusable="false"
+>
+  <rect width="48" height="48" rx="13" fill="currentColor"></rect>
+  <path d="M13 10h9v20h14v8H13V10Z" fill="var(--brand-mark-accent, #c6f531)"
+  ></path>
+  <path
+    d="m29 8-8 14h7l-5 12 13-17h-8l7-9h-6Z"
+    fill="var(--brand-mark-detail, #f3f0e7)"></path>
+</svg>
+
+<style>
+  .brand-symbol {
+    display: block;
+    width: var(--brand-symbol-size, 2rem);
+    height: var(--brand-symbol-size, 2rem);
+    flex: 0 0 auto;
+    color: var(--brand-symbol-background, #173f36);
+  }
+</style>

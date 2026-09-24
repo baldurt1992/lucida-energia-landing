@@ -1,0 +1,197 @@
+<section id="como-funciona" class="process" aria-labelledby="proceso-titulo">
+  <div class="shell">
+    <header class="intro">
+      <h2 id="proceso-titulo">Cómo funciona</h2>
+      <p>
+        Tres pasos, siempre en este orden. No hace falta llegar con la
+        respuesta.
+      </p>
+    </header>
+
+    <ol class="steps">
+      <li data-reveal="step">
+        <div class="step-copy">
+          <h3>Analizamos tu caso</h3>
+          <p>
+            Nos cuentas si eres un hogar, un autónomo o una pyme, y qué no
+            termina de cuadrar en la factura.
+          </p>
+        </div>
+      </li>
+      <li data-reveal="step">
+        <div class="step-copy">
+          <h3>Revisamos tu factura y consumo</h3>
+          <p>
+            Leemos consumo, potencia, precio y servicios. Con la factura a mano
+            la revisión es más precisa; si no la tienes, empezamos por lo que
+            sepas.
+          </p>
+        </div>
+      </li>
+      <li data-reveal="step">
+        <div class="step-copy">
+          <h3>Te proponemos una solución clara</h3>
+          <p>
+            Recibes una explicación y una propuesta comprensible. Cambiar de
+            compañía, si llega a tocarse, sigue siendo decisión tuya.
+          </p>
+        </div>
+      </li>
+    </ol>
+
+    <p class="action">
+      <a class="cta" href="#consulta">Solicitar revisión gratuita</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .process {
+    box-sizing: border-box;
+    padding-block: var(--space-section, var(--section-space));
+    background: var(--color-mineral);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    overflow-x: clip;
+  }
+
+  .process *,
+  .process *::before,
+  .process *::after {
+    box-sizing: border-box;
+  }
+
+  .shell {
+    width: min(100%, var(--container, var(--page-max)));
+    margin-inline: auto;
+    padding-inline: var(--gutter, clamp(1rem, 4vw, 2rem));
+  }
+
+  .intro {
+    display: grid;
+    gap: 0.85rem;
+    margin-block-end: clamp(1.5rem, 4vw, 2.5rem);
+    max-width: 38rem;
+  }
+
+  .intro h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.1rem, 1rem + 3.8vw, 5rem);
+    font-weight: 650;
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .intro p {
+    margin: 0;
+    max-width: 40ch;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--color-muted, var(--color-ink-soft));
+  }
+
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+
+  .steps li {
+    padding-block: clamp(1.15rem, 2.5vw, 1.75rem);
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
+  }
+
+  .steps li:last-child {
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--color-ink) 16%, transparent);
+  }
+
+  .step-copy h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 1rem + 1.5vw, 2.45rem);
+    font-weight: 620;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .step-copy p {
+    margin: 0.55rem 0 0;
+    max-width: 52ch;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  .action {
+    margin: clamp(1.75rem, 4vw, 2.75rem) 0 0;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    max-width: 100%;
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-control, 0.35rem);
+    background: var(--color-current, var(--color-electric));
+    color: var(--color-electric-ink, var(--color-ink));
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 180ms ease;
+  }
+
+  .cta:hover {
+    background: var(
+      --color-electric-hover,
+      color-mix(
+        in srgb,
+        var(--color-current, var(--color-electric)) 78%,
+        var(--color-ink)
+      )
+    );
+  }
+
+  .cta:focus-visible {
+    outline: 2px solid var(--color-current, var(--color-electric));
+    outline-offset: 3px;
+  }
+
+  @media (min-width: 960px) {
+    .steps li:nth-child(1) .step-copy {
+      max-width: 42rem;
+    }
+
+    .steps li:nth-child(2) {
+      padding-inline-start: 12%;
+    }
+
+    .steps li:nth-child(3) {
+      padding-inline-start: 24%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process {
+      scroll-behavior: auto;
+    }
+
+    .cta {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .cta {
+      border: 1px solid ButtonText;
+    }
+  }
+</style>

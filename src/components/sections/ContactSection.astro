@@ -1,0 +1,922 @@
+---
+import { CLIENT_TYPES } from "../../services/leadService";
+
+const clientTypeLabels = {
+  hogar: "Hogar",
+  autonomo: "Autónomo",
+  pyme: "Pyme",
+} as const satisfies Record<(typeof CLIENT_TYPES)[number], string>;
+---
+
+<section
+  class="contact"
+  id="consulta"
+  lang="es"
+  aria-labelledby="consulta-titulo"
+>
+  <div class="shell">
+    <div class="layout">
+      <div class="intro">
+        <h2 id="consulta-titulo">Empecemos por entender tu caso.</h2>
+        <p class="lede">
+          Cuéntanos si eres un hogar, un autónomo o una empresa, y qué duda te
+          deja la factura de luz o gas.
+        </p>
+        <p class="note" id="consulta-nota">
+          Revisaremos tu solicitud y nos pondremos en contacto contigo.
+        </p>
+      </div>
+
+      <div class="form-column">
+        <noscript>
+          <p class="note">
+            Activa JavaScript para completar y enviar la solicitud.
+          </p>
+        </noscript>
+
+        <form
+          class="lead-form"
+          data-lead-form
+          method="post"
+          action="#consulta"
+          novalidate
+          autocomplete="on"
+          aria-labelledby="consulta-titulo"
+          aria-describedby="consulta-nota consulta-obligatorios"
+        >
+          <div class="panel" data-panel="fields">
+            <p class="required-note" id="consulta-obligatorios">
+              Todos los campos son obligatorios.
+            </p>
+
+            <div class="fields">
+              <div class="field">
+                <label for="lead-name">Nombre</label>
+                <input
+                  id="lead-name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  autocapitalize="words"
+                  maxlength="80"
+                  required
+                  spellcheck="false"
+                />
+                <p
+                  id="lead-name-error"
+                  class="field-error"
+                  data-error-for="name"
+                >
+                </p>
+              </div>
+
+              <div class="pair">
+                <div class="field">
+                  <label for="lead-phone">Teléfono</label>
+                  <input
+                    id="lead-phone"
+                    name="phone"
+                    type="tel"
+                    inputmode="tel"
+                    autocomplete="tel"
+                    maxlength="20"
+                    required
+                    spellcheck="false"
+                    data-describedby="lead-phone-hint"
+                    aria-describedby="lead-phone-hint"
+                  />
+                  <p class="hint" id="lead-phone-hint">
+                    Nueve dígitos. Si usas prefijo, añade +34.
+                  </p>
+                  <p
+                    id="lead-phone-error"
+                    class="field-error"
+                    data-error-for="phone"
+                  >
+                  </p>
+                </div>
+
+                <div class="field">
+                  <label for="lead-email">Email</label>
+                  <input
+                    id="lead-email"
+                    name="email"
+                    type="email"
+                    inputmode="email"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    maxlength="254"
+                    required
+                    spellcheck="false"
+                  />
+                  <p
+                    id="lead-email-error"
+                    class="field-error"
+                    data-error-for="email"
+                  >
+                  </p>
+                </div>
+              </div>
+
+              <fieldset class="field client-type">
+                <legend>Tipo de cliente</legend>
+                <div class="choice-grid">
+                  {
+                    CLIENT_TYPES.map((type, index) => (
+                      <label class="choice">
+                        <input
+                          type="radio"
+                          name="clientType"
+                          value={type}
+                          required={index === 0}
+                        />
+                        <span>{clientTypeLabels[type]}</span>
+                      </label>
+                    ))
+                  }
+                </div>
+                <p
+                  id="lead-client-type-error"
+                  class="field-error"
+                  data-error-for="clientType"
+                >
+                </p>
+              </fieldset>
+
+              <div class="field">
+                <label for="lead-message">Mensaje</label>
+                <textarea
+                  id="lead-message"
+                  name="message"
+                  rows="5"
+                  maxlength="800"
+                  required
+                  enterkeyhint="send"
+                  data-describedby="lead-message-hint"
+                  aria-describedby="lead-message-hint"></textarea>
+                <p class="hint" id="lead-message-hint">
+                  Por ejemplo, si quieres revisar la luz, el gas o ambos, y qué
+                  línea de la factura no entiendes.
+                </p>
+                <p
+                  id="lead-message-error"
+                  class="field-error"
+                  data-error-for="message"
+                >
+                </p>
+              </div>
+            </div>
+
+            <p
+              class="status"
+              data-form-status
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              tabindex="-1"
+            >
+            </p>
+
+            <button class="cta" type="submit" data-submit
+              >Solicitar revisión gratuita</button
+            >
+          </div>
+
+          <div class="panel" data-panel="success" hidden>
+            <h3
+              id="consulta-resultado"
+              data-success-title
+              tabindex="-1"
+              aria-describedby="consulta-resultado-detalle"
+            >
+              Solicitud recibida
+            </h3>
+            <p
+              id="consulta-resultado-detalle"
+              data-success-copy
+              role="status"
+              aria-live="polite"
+            >
+            </p>
+            <button class="reset" type="button" data-reset
+              >Escribir otra solicitud</button
+            >
+          </div>
+
+          <div class="honeypot" aria-hidden="true">
+            <label for="lead-company-website">Sitio web de la empresa</label>
+            <input
+              id="lead-company-website"
+              name="company_website"
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+              data-lpignore="true"
+              data-1p-ignore="true"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import {
+    leadService,
+    type FieldError,
+    type FieldErrorCode,
+    type FieldName,
+    type LeadDraft,
+    type LeadInspection,
+    type LeadSubmitResult,
+  } from "../../services/leadService";
+
+  const FIELD_ORDER = [
+    "name",
+    "phone",
+    "email",
+    "clientType",
+    "message",
+  ] as const;
+
+  const FIELD_MESSAGES: Record<FieldName, Record<FieldErrorCode, string>> = {
+    name: {
+      invalid:
+        "Escribe tu nombre con letras, espacios o guiones. Entre 2 y 80 caracteres.",
+      "too-long": "El nombre admite hasta 80 caracteres.",
+    },
+    phone: {
+      invalid:
+        "Indica un teléfono de España: nueve dígitos, con +34 si usas prefijo.",
+      "too-long":
+        "Indica un teléfono de España: nueve dígitos, con +34 si usas prefijo.",
+    },
+    email: {
+      invalid:
+        "Revisa el email. Tiene que incluir un nombre, una @ y un dominio.",
+      "too-long": "El email admite hasta 254 caracteres.",
+    },
+    clientType: {
+      invalid: "Selecciona si eres un hogar, un autónomo o una pyme.",
+      "too-long": "Selecciona si eres un hogar, un autónomo o una pyme.",
+    },
+    message: {
+      invalid:
+        "Cuéntanos tu caso en una frase: luz, gas o la duda que te trae.",
+      "too-long":
+        "El mensaje admite hasta 800 caracteres. Resume el caso y deja el detalle para la revisión.",
+    },
+  };
+
+  const SUCCESS_TITLE = "Solicitud recibida";
+  const SUCCESS_DETAIL =
+    "Gracias por contarnos tu caso. Nos pondremos en contacto contigo para revisar los próximos pasos.";
+
+  type LogData = Record<string, string | number | boolean>;
+
+  function isDevelopment(): boolean {
+    const env = import.meta.env;
+    return Boolean(env && env.DEV);
+  }
+
+  /** TEMPORAL: estado visible del formulario. Retirar cuando el flujo quede estable. */
+  function logForm(context: string, data: LogData): void {
+    if (!isDevelopment()) return;
+    console.info(`[ContactForm] ${context}`, data);
+  }
+
+  function isFieldName(value: string | null): value is FieldName {
+    return value !== null && (FIELD_ORDER as readonly string[]).includes(value);
+  }
+
+  function messageFor(error: FieldError): string {
+    return FIELD_MESSAGES[error.field][error.code];
+  }
+
+  function initLeadForms(): void {
+    document
+      .querySelectorAll<HTMLFormElement>("[data-lead-form]")
+      .forEach((form) => {
+        if (form.dataset.bound === "true") return;
+        form.dataset.bound = "true";
+        bindLeadForm(form);
+      });
+  }
+
+  function bindLeadForm(form: HTMLFormElement): void {
+    const fieldsPanel = form.querySelector<HTMLElement>(
+      '[data-panel="fields"]',
+    );
+    const successPanel = form.querySelector<HTMLElement>(
+      '[data-panel="success"]',
+    );
+    const successTitle = form.querySelector<HTMLElement>(
+      "[data-success-title]",
+    );
+    const successCopy = form.querySelector<HTMLElement>("[data-success-copy]");
+    const status = form.querySelector<HTMLElement>("[data-form-status]");
+    const resetButton = form.querySelector<HTMLButtonElement>("[data-reset]");
+
+    if (
+      !fieldsPanel ||
+      !successPanel ||
+      !successTitle ||
+      !successCopy ||
+      !status
+    ) {
+      logForm("ContactSection → bindLeadForm", { state: "panel-ausente" });
+      return;
+    }
+
+    let pending = false;
+
+    const controlFor = (field: FieldName): HTMLElement | null => {
+      const control = form.elements.namedItem(field);
+      if (control instanceof HTMLElement) return control;
+      return form.querySelector<HTMLElement>(`[name="${field}"]`);
+    };
+
+    const setStatus = (message: string, tone: "neutral" | "error"): void => {
+      status.textContent = message;
+      status.dataset.tone = message ? tone : "neutral";
+    };
+
+    const restoreDescribedBy = (control: HTMLElement): void => {
+      const base = control.dataset.describedby ?? "";
+      if (base) control.setAttribute("aria-describedby", base);
+      else control.removeAttribute("aria-describedby");
+    };
+
+    const clearFieldError = (field: FieldName): void => {
+      const control = controlFor(field);
+      const error = form.querySelector<HTMLElement>(
+        `[data-error-for="${field}"]`,
+      );
+      if (error) error.textContent = "";
+      if (!control) return;
+      control.setAttribute("aria-invalid", "false");
+      restoreDescribedBy(control);
+    };
+
+    const clearErrors = (): void => {
+      for (const field of FIELD_ORDER) clearFieldError(field);
+    };
+
+    const applyError = (error: FieldError): void => {
+      const control = controlFor(error.field);
+      const message = form.querySelector<HTMLElement>(
+        `[data-error-for="${error.field}"]`,
+      );
+      if (!control || !message) return;
+      message.textContent = messageFor(error);
+      control.setAttribute("aria-invalid", "true");
+      const base = control.dataset.describedby ?? "";
+      control.setAttribute(
+        "aria-describedby",
+        base ? `${base} ${message.id}` : message.id,
+      );
+    };
+
+    const focusFirstInvalid = (errors: readonly FieldError[]): void => {
+      const invalid = new Set(errors.map((error) => error.field));
+      for (const field of FIELD_ORDER) {
+        if (!invalid.has(field)) continue;
+        controlFor(field)?.focus();
+        return;
+      }
+    };
+
+    const setPending = (isPending: boolean): void => {
+      form.setAttribute("aria-busy", isPending ? "true" : "false");
+      form
+        .querySelectorAll<
+          | HTMLInputElement
+          | HTMLSelectElement
+          | HTMLTextAreaElement
+          | HTMLButtonElement
+        >("input, select, textarea, button")
+        .forEach((control) => {
+          control.disabled = isPending;
+        });
+      const button = form.querySelector<HTMLButtonElement>("[data-submit]");
+      if (button) {
+        button.textContent = isPending
+          ? "Validando solicitud"
+          : "Solicitar revisión gratuita";
+      }
+    };
+
+    const showSuccess = (title: string, detail: string): void => {
+      fieldsPanel.hidden = true;
+      successPanel.hidden = false;
+      successTitle.textContent = title;
+      successCopy.textContent = detail;
+      successTitle.focus();
+    };
+
+    const showAccepted = (): void => {
+      showSuccess(SUCCESS_TITLE, SUCCESS_DETAIL);
+    };
+
+    const showInvalid = (errors: readonly FieldError[]): void => {
+      clearErrors();
+      for (const error of errors) applyError(error);
+      setStatus(
+        "Hay campos por completar. Revisa el mensaje junto a cada uno.",
+        "error",
+      );
+      focusFirstInvalid(errors);
+    };
+
+    const showFailed = (): void => {
+      setStatus(
+        "No se pudo completar la comprobación en esta página. Puedes intentarlo otra vez.",
+        "error",
+      );
+      status.focus();
+    };
+
+    const applyResult = (result: LeadSubmitResult): void => {
+      switch (result.status) {
+        case "accepted":
+          logForm("ContactSection → submit", {
+            state: result.transmitted ? "sent" : "simulated-success",
+          });
+          showAccepted();
+          return;
+        case "discarded":
+          logForm("ContactSection → submit", { state: "discarded" });
+          showAccepted();
+          return;
+        case "invalid":
+          logForm("ContactSection → submit", {
+            state: "invalid",
+            count: result.errors.length,
+          });
+          showInvalid(result.errors);
+          return;
+        case "failed":
+          logForm("ContactSection → submit", { state: "failed" });
+          showFailed();
+          return;
+        default: {
+          const unexpected: never = result;
+          logForm("ContactSection → submit", { state: "unexpected" });
+          showFailed();
+          return unexpected;
+        }
+      }
+    };
+
+    const readDraft = (): LeadDraft => {
+      const data = new FormData(form);
+      const read = (key: string): string => String(data.get(key) ?? "");
+      return {
+        name: read("name"),
+        phone: read("phone"),
+        email: read("email"),
+        clientType: read("clientType"),
+        message: read("message"),
+        honeypot: read("company_website"),
+      };
+    };
+
+    const onEdit = (event: Event): void => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const field = target.getAttribute("name");
+      if (!isFieldName(field) || target.getAttribute("aria-invalid") !== "true")
+        return;
+      clearFieldError(field);
+      const stillInvalid = FIELD_ORDER.some(
+        (name) => controlFor(name)?.getAttribute("aria-invalid") === "true",
+      );
+      if (!stillInvalid) setStatus("", "neutral");
+    };
+
+    const onSubmit = async (event: SubmitEvent): Promise<void> => {
+      event.preventDefault();
+      if (pending) return;
+
+      const draft = readDraft();
+      const inspection: LeadInspection = leadService.inspect(draft);
+
+      switch (inspection.status) {
+        case "invalid":
+          logForm("ContactSection → submit", {
+            state: "invalid",
+            count: inspection.errors.length,
+          });
+          showInvalid(inspection.errors);
+          return;
+        case "discarded":
+          logForm("ContactSection → submit", { state: "discarded" });
+          showAccepted();
+          return;
+        case "ready":
+          break;
+        default: {
+          const unexpected: never = inspection;
+          logForm("ContactSection → submit", { state: "unexpected" });
+          showFailed();
+          return unexpected;
+        }
+      }
+
+      pending = true;
+      setPending(true);
+      setStatus("Enviando solicitud…", "neutral");
+      logForm("ContactSection → submit", { state: "loading" });
+
+      try {
+        const result = await leadService.submit(draft);
+        pending = false;
+        setPending(false);
+        applyResult(result);
+      } catch (error) {
+        pending = false;
+        setPending(false);
+        const errorName = error instanceof Error ? error.name : "UnknownError";
+        logForm("ContactSection → submit", { state: "failed", errorName });
+        showFailed();
+      }
+    };
+
+    form.addEventListener("submit", (event) => {
+      void onSubmit(event);
+    });
+    form.addEventListener("input", onEdit);
+    form.addEventListener("change", onEdit);
+    resetButton?.addEventListener("click", () => {
+      form.reset();
+      clearErrors();
+      setStatus("", "neutral");
+      successPanel.hidden = true;
+      fieldsPanel.hidden = false;
+      controlFor("name")?.focus();
+      logForm("ContactSection → reset", { state: "idle" });
+    });
+  }
+
+  initLeadForms();
+  document.addEventListener("astro:page-load", initLeadForms);
+</script>
+
+<style>
+  .contact {
+    --signal-error: #7d2b28;
+    box-sizing: border-box;
+    background: var(--color-mineral, #f3f0e8);
+    color: var(--color-ink, #14211c);
+    font-family: var(--font-body, "Public Sans", sans-serif);
+    padding-block: var(--space-section, clamp(4.5rem, 8vw, 7.5rem));
+  }
+
+  .contact *,
+  .contact *::before,
+  .contact *::after {
+    box-sizing: border-box;
+  }
+
+  .contact :where(h2, h3, p) {
+    margin: 0;
+  }
+
+  .shell {
+    width: min(100%, var(--container, var(--page-max)));
+    margin-inline: auto;
+    padding-inline: var(--gutter, clamp(1.25rem, 4vw, 3.5rem));
+  }
+
+  .layout {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .intro,
+  .form-column,
+  .field {
+    min-width: 0;
+  }
+
+  h2,
+  h3 {
+    font-family: var(--font-display, Archivo, sans-serif);
+    font-weight: 640;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+
+  h2 {
+    font-size: clamp(2.3rem, 5vw, 4.5rem);
+  }
+
+  h3 {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+  }
+
+  .lede,
+  .note,
+  .hint,
+  .required-note,
+  .status,
+  .field-error,
+  #consulta-resultado-detalle {
+    max-width: 65ch;
+    line-height: 1.5;
+  }
+
+  .lede {
+    margin-top: 1.15rem;
+    font-size: 1.0625rem;
+  }
+
+  .note,
+  .hint,
+  .required-note {
+    color: var(--color-muted, #3e5149);
+  }
+
+  .note {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-ink, #14211c) 18%, transparent);
+  }
+
+  .lead-form {
+    position: relative;
+    color-scheme: light;
+  }
+
+  .panel {
+    display: grid;
+    gap: 1.35rem;
+  }
+
+  .panel[hidden] {
+    display: none;
+  }
+
+  .fields {
+    display: grid;
+    gap: 1.35rem;
+  }
+
+  .pair {
+    display: grid;
+    gap: 1.35rem;
+    align-items: start;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+  }
+
+  label,
+  legend,
+  .required-note {
+    font-weight: 680;
+  }
+
+  input,
+  textarea,
+  button {
+    font: inherit;
+    font-size: max(1rem, 16px);
+    color: inherit;
+  }
+
+  input:not([type="radio"]),
+  textarea {
+    width: 100%;
+    border: 1px solid
+      color-mix(in srgb, var(--color-ink, #14211c) 28%, transparent);
+    border-radius: 4px;
+    padding: 0.8rem 0.9rem;
+    background: color-mix(in srgb, var(--color-mineral, #f3f0e8) 80%, white);
+    line-height: 1.4;
+  }
+
+  input:not([type="radio"]) {
+    height: 3.25rem;
+  }
+
+  textarea {
+    min-height: 7rem;
+    resize: vertical;
+  }
+
+  .client-type {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .client-type legend {
+    margin-bottom: 0.55rem;
+  }
+
+  .choice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .choice {
+    position: relative;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  .choice input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .choice span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.25rem;
+    padding: 0.7rem 0.55rem;
+    border: 1px solid
+      color-mix(in srgb, var(--color-ink, #14211c) 28%, transparent);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--color-mineral, #f3f0e8) 80%, white);
+    font-size: var(--text-sm);
+    text-align: center;
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .choice:hover span {
+    border-color: var(--color-petroleum);
+  }
+
+  .choice input:checked + span {
+    border-color: var(--color-petroleum);
+    background: var(--color-petroleum);
+    color: var(--color-mineral);
+  }
+
+  .choice input:focus-visible + span {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  .status:focus {
+    outline: 2px solid var(--color-ink, #14211c);
+    outline-offset: 3px;
+  }
+
+  input[aria-invalid="true"],
+  textarea[aria-invalid="true"] {
+    border-color: var(--signal-error);
+  }
+
+  .choice input[aria-invalid="true"] + span {
+    border-color: var(--signal-error);
+  }
+
+  .field-error:empty,
+  .status:empty {
+    display: none;
+  }
+
+  .field-error,
+  .status[data-tone="error"] {
+    color: var(--signal-error);
+  }
+
+  .cta,
+  .reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 28rem;
+    min-height: 48px;
+    padding: 0.85rem 1.25rem;
+    border-radius: 4px;
+    font-weight: 680;
+    line-height: 1.25;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .cta {
+    border: 0;
+    background: var(--color-current, #d6f25c);
+    color: var(--color-ink, #14211c);
+  }
+
+  .cta:hover {
+    background: color-mix(
+      in srgb,
+      var(--color-current, #d6f25c) 82%,
+      var(--color-ink, #14211c)
+    );
+  }
+
+  .cta:focus-visible,
+  .reset:focus-visible,
+  h3:focus {
+    outline: 2px solid var(--color-ink, #14211c);
+    outline-offset: 4px;
+  }
+
+  .cta:disabled {
+    cursor: not-allowed;
+    background: color-mix(
+      in srgb,
+      var(--color-current, #d6f25c) 50%,
+      var(--color-mineral, #f3f0e8)
+    );
+    color: var(--color-ink, #14211c);
+  }
+
+  .reset {
+    width: auto;
+    padding-inline: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.22em;
+  }
+
+  .honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  #consulta-resultado-detalle {
+    margin-top: 0.85rem;
+  }
+
+  .reset {
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .pair {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1.25rem 1.5rem;
+    }
+
+    .cta {
+      width: auto;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .layout {
+      grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.15fr);
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .intro {
+      position: sticky;
+      top: 6rem;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .cta,
+    .reset,
+    .choice span {
+      border: 1px solid ButtonText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta,
+    .reset,
+    input,
+    textarea,
+    .choice span {
+      transition: none;
+      animation: none;
+    }
+  }
+</style>

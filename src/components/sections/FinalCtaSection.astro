@@ -1,0 +1,107 @@
+<section class="final-cta" id="cierre" lang="es" aria-labelledby="cierre-titulo">
+  <div class="shell">
+    <h2 id="cierre-titulo" data-reveal="mask">Menos incertidumbre. Más control sobre tu energía.</h2>
+    <p class="lede">Si quieres una explicación de tu factura, el siguiente paso es contar tu caso.</p>
+    <p class="support">Revisión inicial gratuita. Sin obligación de cambiar de compañía.</p>
+    <a class="cta" href="#consulta">Solicitar revisión gratuita</a>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    box-sizing: border-box;
+    background: var(--color-petrol, #0f3d36);
+    color: var(--color-mineral, #f3f0e8);
+    font-family: var(--font-body, "Public Sans", sans-serif);
+    padding-block: calc(var(--space-section, clamp(4.5rem, 8vw, 7.5rem)) * 1.15);
+  }
+
+  .final-cta *,
+  .final-cta *::before,
+  .final-cta *::after {
+    box-sizing: border-box;
+  }
+
+  .final-cta :where(h2, p) {
+    margin: 0;
+  }
+
+  .shell {
+    width: min(100%, var(--container, var(--page-max)));
+    margin-inline: auto;
+    padding-inline: var(--gutter, clamp(1.25rem, 4vw, 3.5rem));
+  }
+
+  h2 {
+    max-width: 14em;
+    font-family: var(--font-display, Archivo, sans-serif);
+    font-size: clamp(2.15rem, 6.4vw, 5.5rem);
+    font-weight: 640;
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+
+  .lede {
+    margin-top: 1.5rem;
+    max-width: 36ch;
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  .support {
+    margin-top: 0.85rem;
+    max-width: 36ch;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--color-mineral, #f3f0e8) 82%, var(--color-sky, #d5e6ea));
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 28rem;
+    min-height: 48px;
+    margin-top: 2rem;
+    padding: 0.85rem 1.35rem;
+    border-radius: 4px;
+    background: var(--color-current, #d6f25c);
+    color: var(--color-ink, #14211c);
+    font-weight: 680;
+    font-size: 1rem;
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
+    text-wrap: balance;
+  }
+
+  .cta:hover {
+    background: color-mix(in srgb, var(--color-current, #d6f25c) 82%, var(--color-ink, #14211c));
+  }
+
+  .cta:focus-visible {
+    outline: 2px solid var(--color-mineral, #f3f0e8);
+    outline-offset: 4px;
+  }
+
+  @media (min-width: 40rem) {
+    .cta {
+      width: auto;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .cta {
+      border: 1px solid ButtonText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta {
+      transition: none;
+      animation: none;
+    }
+  }
+</style>

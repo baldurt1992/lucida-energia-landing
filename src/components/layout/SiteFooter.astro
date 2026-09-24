@@ -1,0 +1,232 @@
+---
+import BrandMark from "../brand/BrandMark.astro";
+
+const year = new Date().getFullYear();
+
+const pageLinks = [
+  { href: "#beneficios", label: "Beneficios" },
+  { href: "#como-funciona", label: "Cómo funciona" },
+  { href: "#preguntas", label: "Preguntas frecuentes" },
+  { href: "#consulta", label: "Solicitar revisión gratuita" },
+] as const;
+
+const legalNotes = [
+  {
+    id: "aviso-legal",
+    title: "Aviso legal",
+    text: "LÚCIDA es una identidad provisional de esta prueba técnica. No hay domicilio, CIF ni canal de atención asociados a este nombre en la página.",
+  },
+  {
+    id: "privacidad",
+    title: "Privacidad",
+    text: "El formulario representa un flujo de contacto. La política definitiva deberá identificar al responsable y explicar el tratamiento de los datos antes de publicar el servicio.",
+  },
+  {
+    id: "cookies",
+    title: "Cookies",
+    text: "Esta maqueta no instala cookies de analítica ni de publicidad. Si más adelante se añadieran, deberían informarse antes de activarse.",
+  },
+] as const;
+---
+
+<footer class="site-footer" lang="es">
+  <div class="shell">
+    <div class="brand">
+      <div class="brand-lockup">
+        <BrandMark class="footer-mark" />
+        <p class="wordmark">LÚCIDA</p>
+      </div>
+      <p class="role">Asesoría energética</p>
+      <p class="disclaimer">
+        Marca conceptual de esta prueba. No es una sociedad registrada ni un
+        servicio en operación.
+      </p>
+    </div>
+
+    <nav class="page-nav" aria-label="En la página">
+      {pageLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+
+    <div class="legal">
+      <h2 id="informacion-legal">Información legal simulada</h2>
+      <p class="disclaimer">
+        Estos textos no son documentos jurídicos. Los enlaces recorren la propia
+        página.
+      </p>
+      <nav class="legal-nav" aria-label="Información legal">
+        {legalNotes.map((note) => <a href={`#${note.id}`}>{note.title}</a>)}
+      </nav>
+      <div class="legal-notes">
+        {
+          legalNotes.map((note) => (
+            <article>
+              <h3 id={note.id} tabindex="-1">
+                {note.title}
+              </h3>
+              <p>{note.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <p class="colophon">
+      © {year} LÚCIDA. Identidad provisional para una prueba de diseño.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    box-sizing: border-box;
+    background: var(--color-ink, #14211c);
+    color: var(--color-mineral, #f3f0e8);
+    font-family: var(--font-body, "Public Sans", sans-serif);
+    padding-block: var(--space-section, clamp(4.5rem, 8vw, 7.5rem));
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-mineral, #f3f0e8) 24%, transparent);
+  }
+
+  .site-footer *,
+  .site-footer *::before,
+  .site-footer *::after {
+    box-sizing: border-box;
+  }
+
+  .site-footer :where(h2, h3, p) {
+    margin: 0;
+  }
+
+  .shell {
+    width: min(100%, var(--container, var(--page-max)));
+    margin-inline: auto;
+    padding-inline: var(--gutter, clamp(1.25rem, 4vw, 3.5rem));
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .wordmark {
+    font-family: var(--font-display, Archivo, sans-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 680;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
+
+  .brand-lockup {
+    --brand-symbol-size: clamp(2.75rem, 5vw, 3.75rem);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .role {
+    margin-top: 0.4rem;
+  }
+
+  .disclaimer {
+    max-width: 46ch;
+    margin-top: 0.85rem;
+    line-height: 1.5;
+    color: color-mix(
+      in srgb,
+      var(--color-mineral, #f3f0e8) 78%,
+      var(--color-sky, #d5e6ea)
+    );
+  }
+
+  .page-nav,
+  .legal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.25rem;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: inherit;
+    text-underline-offset: 0.22em;
+  }
+
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  a:focus-visible,
+  h3:focus-visible {
+    outline: 2px solid var(--color-mineral, #f3f0e8);
+    outline-offset: 4px;
+  }
+
+  .legal {
+    display: grid;
+    gap: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-mineral, #f3f0e8) 22%, transparent);
+  }
+
+  h2,
+  h3 {
+    font-family: var(--font-display, Archivo, sans-serif);
+    font-weight: 640;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  .legal-notes {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .legal-notes p {
+    max-width: 65ch;
+    margin-top: 0.45rem;
+    line-height: 1.5;
+    color: color-mix(
+      in srgb,
+      var(--color-mineral, #f3f0e8) 82%,
+      var(--color-sky, #d5e6ea)
+    );
+  }
+
+  .colophon {
+    font-size: 0.95rem;
+    color: color-mix(
+      in srgb,
+      var(--color-mineral, #f3f0e8) 74%,
+      var(--color-sky, #d5e6ea)
+    );
+  }
+
+  @media (min-width: 64rem) {
+    .legal-notes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2rem;
+    }
+  }
+
+  @media (forced-colors: active) {
+    a {
+      border: 1px solid ButtonText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+      animation: none;
+    }
+  }
+</style>
