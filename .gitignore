@@ -8,3 +8,4 @@ dist/
 npm-debug.log*
 .playwright-cli/
 C:*/
+.vercel

@@ -4,7 +4,7 @@ Landing page desarrollada para la prueba técnica de Grupo EMAX. Presenta un ser
 
 ## Demo
 
-La URL pública se añadirá después del despliegue.
+[Ver landing publicada](https://landinggrupoemax.vercel.app)
 
 ## Objetivo
 
